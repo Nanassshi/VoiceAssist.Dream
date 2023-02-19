@@ -9,6 +9,9 @@ from pydub.playback import play
 
 import webbrowser
 import os
+import pathlib
+
+from tkinter import *
 
 
 count = 0
@@ -76,20 +79,66 @@ def audio_to_text(filename):
 
     def main():
         speech_ogg = SpeechOggAudioFileToText()
-        command_text = speech_ogg.text
+        text = speech_ogg.text
         print(speech_ogg.text)
-
-        get_commands(command_text)
-        os.unlink(filename)
+        time = 2
+        get_commands(text, time, filename)
     if __name__ == '__main__':
         main()
 
 
-def get_commands(command_text):
-    text = command_text
-    time = 2
+def get_commands(text, time, filename):
+    if "нямка" in text or "Нямка" in text or "Привет" in text or "Прив" in text or "Даров" in text or "Хай" in text:
+        if "как дела" in text or "как ты" in text or "Как у тебя дела" in text or "Как дела" in text:
+            DIR = 'mood'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+        elif "расскажи анекдот" in text or "насмеши" in text or "шутка" in text or "пошути" in text:
+            DIR = 'anecdot'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+        elif "ВК" in text or "ВКонтакте" in text or "в контакте" in text or "VK" in text or "vk" in text:
+            webbrowser.open('https://vk.com', new=2)
+            DIR = 'vk'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+        elif "Что такое" in text or "это что" in text or "Кто такой" in text:
+            text_list = text.split()
+            if text_list[0] == "Дрим" or text_list[0] == "Dream":
+                text_list[0] = ""
+                text = " ".join(text_list)
+            else:
+                text = " ".join(text_list)
+            webbrowser.open('http://www.google.com/search?q=' + text)
+            DIR = 'finding'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+        elif "осу" in text or "osu" in text or "Osu" in text or "Осу" in text:
+            DIR = 'osu'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+            os.startfile('game')
+        elif "Спасибо" in text or "Благодарю" in text or "Спасибки" in text or "Благодарочка" in text:
+            DIR = 'welcome'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+        elif "php" in text or "PHP" in text or "шторм" in text or "storm" in text:
+            os.startfile('C:\ProgramData\Microsoft\Windows\Start Menu\Programs\JetBrains\PhpStorm 2020.1.4.lnk')
+            DIR = 'codding'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
 
-    if "анекдот" in text or "насмеши" in text or "шутка" in text or "пошути" in text:
+        else:
+            DIR = 'hello'
+            song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+            play(song)
+
+    elif "как дела" in text or "как ты" in text or "Как у тебя дела" in text:
+        DIR = 'mood'
+        song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+        play(song)
+
+    elif "Расскажи анекдот" in text or "насмеши" in text or "шутка" in text or "пошути" in text:
         DIR = 'anecdot'
         song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
         play(song)
@@ -112,6 +161,12 @@ def get_commands(command_text):
         song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
         play(song)
 
+    elif "осу" in text or "osu" in text or "Osu" in text or "Осу" in text:
+        DIR = 'osu'
+        song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+        play(song)
+        os.startfile('game')
+
     elif "Спасибо" in text or "Благодарю" in text or "Спасибки" in text or "Благодарочка" in text:
         DIR = 'welcome'
         song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
@@ -128,20 +183,37 @@ def get_commands(command_text):
         song = AudioSegment.from_mp3((os.path.join(DIR, random.choice(os.listdir(DIR)))))
         play(song)
 
-    elif "Привет" in text or "Прив" in text or "Даров" in text or "Хай" in text:
-        DIR = 'hello'
+    elif "Спасибо" in text or "Благодарю" in text or "Спасибки" in text or "Благодарочка" in text:
+        DIR = 'welcome'
         song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
         play(song)
-        time = 4
 
-    elif "Дрим" in text or "Dream" in text:
+    elif "как дела" in text or "как ты" in text or "Как у тебя дела" in text or "Как дела" in text:
+        DIR = 'mood'
+        song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+        play(song)
+
+    elif "почисти" in text or "очисти" in text and "файлы" in text or "записи" in text:
+        for file in os.listdir():
+            if file.endswith(".wav"):
+                os.remove(file)
+
+        DIR = 'welcome'
+        song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
+        play(song)
+
+    else:
         DIR = 'mistake'
         song = AudioSegment.from_mp3(os.path.join(DIR, random.choice(os.listdir(DIR))))
         play(song)
-        time = 4
 
+    time = 3
     listen(count, time)
 
 
 while True:
-    listen(count, 3)
+    listen(count, 2)
+
+
+
+
